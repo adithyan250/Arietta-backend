@@ -48,6 +48,7 @@ const addProduct = async (req, res) => {
     res.json({imagesUrl})
     
     } catch (error) {
+        console.log(error.message);
         res.json({success: false, message: error.message})
     }
 }
@@ -55,19 +56,38 @@ const addProduct = async (req, res) => {
 // list product 
 
 const listProduct = async (req, res) => {
-    
+    try {
+        const products = await productModel.find({});
+        res.json({success:true, products});
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.message})
+    }
 }
 
 // remove product 
 
 const removeProduct = async (req, res) => {
-    
+    try {
+        await productModel.findByIdAndDelete(req.body.id);
+        res.json({success: true, message:"Products Removed"});
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.message});
+    }
 }
 
 // single product info 
 
 const singleProduct = async (req, res) => {
-    
+    try {
+        const {productId} = req.body;
+        const product = await productModel.findById(productId);
+        res.json({success:true, product})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.message})
+    }
 }
 
 export {
